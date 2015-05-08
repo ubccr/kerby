@@ -44,10 +44,17 @@ Example HTTP Kerberos client authentication using a client keytab file::
 
     func main() {
         payload := []byte(`{"method":"hello_world"}`)
-        req, err := http.NewRequest("POST", "https://server.example.com/json", bytes.NewBuffer(payload))
+        req, err := http.NewRequest(
+            "POST",
+            "https://server.example.com/json",
+            bytes.NewBuffer(payload))
+
         req.Header.Set("Content-Type", "application/json")
 
-        t := &khttp.Transport{KeyTab: "/path/to/client.keytab", Principal: "principal@REALM"}
+        t := &khttp.Transport{
+            KeyTab: "/path/to/client.keytab",
+            Principal: "principal@REALM"}
+
         client := &http.Client{Transport: t}
 
         res, err := client.Do(req)
