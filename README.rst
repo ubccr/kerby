@@ -17,7 +17,7 @@ Note: You need the have the krb5-libs/GSSAPI packages installed for your OS.
 
 Install using go tools::
 
-    $ go get install github.com/ubccr/kerby
+    $ go get github.com/ubccr/kerby
 
 To run the unit tests you must have a valid Kerberos setup on the test machine
 and you should ensure that you have valid Kerberos tickets (run 'klist' on the
