@@ -79,7 +79,6 @@ func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
 
     authReply := strings.Split(resp.Header.Get(wwwAuthenticateHeader), " ")
     if len(authReply) != 2 || authReply[0] != negotiateHeader {
-        fmt.Printf("%q", authReply)
         return nil, errors.New("khttp: server replied with invalid authorization header")
     }
 
