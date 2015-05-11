@@ -56,6 +56,7 @@ func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
     if err != nil {
         return nil, err
     }
+    defer kc.Clean()
 
     err = kc.Step("")
     if err != nil {
@@ -87,7 +88,6 @@ func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
     if err != nil {
         return nil, err
     }
-    kc.Clean()
 
     return resp, nil
 }
