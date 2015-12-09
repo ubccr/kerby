@@ -5,7 +5,7 @@ Kerby - Go wrapper for Kerberos GSSAPI
 This is a port of the PyKerberos library in Go. The main motivation for this
 library was to provide HTTP client authentication using Kerberos. The khttp
 package provides a transport that authenticates all outgoing requests using
-SPNEGO (negotiate authentication) http://tools.ietf.org/html/rfc4559. 
+SPNEGO (negotiate authentication) http://tools.ietf.org/html/rfc4559.
 
 The C code is adapted from PyKerberos http://calendarserver.org/wiki/PyKerberos.
 
@@ -72,10 +72,41 @@ Example HTTP Kerberos client authentication using a client keytab file::
         fmt.Printf("%s", data)
     }
 
+Example HTTP handler supporting Kerberose authentication::
+
+    func handler(w http.ResponseWriter, req *http.Request) {
+        authReq := strings.Split(req.Header.Get(authorizationHeader), " ")
+        if len(authReq) != 2 || authReq[0] != negotiateHeader {
+            w.Header().Set(wwwAuthenticateHeader, negotiateHeader)
+            http.Error(w, "Invalid authorization header", http.StatusUnauthorized)
+            return
+        }
+
+        ks := new(kerby.KerbServer)
+        err := ks.Init("")
+        if err != nil {
+            log.Printf("KerbServer Init Error: %s", err.Error())
+            http.Error(w, err.Error(), http.StatusInternalServerError)
+            return
+        }
+        defer ks.Clean()
+
+
+        err = ks.Step(authReq[1])
+        w.Header().Set(wwwAuthenticateHeader, negotiateHeader+" "+ks.Response())
+
+        if err != nil {
+            log.Printf("KerbServer Step Error: %s", err.Error())
+            http.Error(w, err.Error(), http.StatusUnauthorized)
+            return
+        }
+
+        user := ks.UserName()
+        fmt.Fprintf(w, "Hello, %s", user)
+    }
+
 ------------------------------------------------------------------------
 License
 ------------------------------------------------------------------------
 
 Kerby is released under the Apache 2.0 License. See the LICENSE file.
-
-

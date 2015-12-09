@@ -55,10 +55,14 @@ typedef struct {
     char*            targetname;
     char*            response;
     char*            ccname;
+    OM_uint32        maj_stat;
+    OM_uint32        min_stat;
 } gss_server_state;
 
 gss_client_state* new_gss_client_state();
 void free_gss_client_state(gss_client_state *state);
+gss_server_state* new_gss_server_state();
+void free_gss_server_state(gss_server_state *state);
 void get_gss_error(OM_uint32 err_maj, char *buf_maj, OM_uint32 err_min, char *buf_min);
 
 int authenticate_gss_client_init(
@@ -70,4 +74,13 @@ int authenticate_gss_client_clean(
 );
 int authenticate_gss_client_step(
     gss_client_state *state, const char *challenge
+);
+int authenticate_gss_server_init(
+    const char* service, gss_server_state* state
+);
+int authenticate_gss_server_clean(
+    gss_server_state *state
+);
+int authenticate_gss_server_step(
+    gss_server_state *state, const char *challenge
 );
