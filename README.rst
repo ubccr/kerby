@@ -2,6 +2,8 @@
 Kerby - Go wrapper for Kerberos GSSAPI 
 ===============================================================================
 
+|godoc|
+
 This is a port of the PyKerberos library in Go. The main motivation for this
 library was to provide HTTP client authentication using Kerberos. The khttp
 package provides a transport that authenticates all outgoing requests using
@@ -110,3 +112,10 @@ License
 ------------------------------------------------------------------------
 
 Kerby is released under the Apache 2.0 License. See the LICENSE file.
+
+
+
+.. |godoc| image:: https://godoc.org/github.com/golang/gddo?status.svg
+    :target: https://godoc.org/github.com/ubccr/kerby
+    :alt: Godoc
+
