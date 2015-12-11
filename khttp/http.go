@@ -52,7 +52,7 @@ func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
 	}
 	host, _, err := net.SplitHostPort(req.URL.Host)
 	if err != nil {
-		return nil, err
+		host = req.URL.Host
 	}
 	service := fmt.Sprintf("HTTP@%s", host)
 	kc := new(kerby.KerbClient)
