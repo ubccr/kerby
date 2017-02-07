@@ -28,7 +28,7 @@ import (
 )
 
 var (
-	negotiateHeader       = "Negotiate"
+	negotiateHeader       = "negotiate"
 	wwwAuthenticateHeader = "WWW-Authenticate"
 	authorizationHeader   = "Authorization"
 )
@@ -83,7 +83,7 @@ func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
 	}
 
 	authReply := strings.Split(resp.Header.Get(wwwAuthenticateHeader), " ")
-	if len(authReply) != 2 || authReply[0] != negotiateHeader {
+	if len(authReply) != 2 || strings.ToLower(authReply[0]) != negotiateHeader {
 		return nil, errors.New("khttp: server replied with invalid www-authenticate header")
 	}
 
