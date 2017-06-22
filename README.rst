@@ -107,6 +107,21 @@ Example HTTP handler supporting Kerberose authentication::
         fmt.Fprintf(w, "Hello, %s", user)
     }
 
+Example adding Kerberos authentication to an http.FileServer using khttp.Handler::
+
+    package main
+
+    import (
+        "github.com/ubccr/kerby/khttp"
+        "log"
+        "net/http"
+    )
+
+    func main() {
+        http.Handle("/", khttp.Handler(http.FileServer(http.Dir("/tmp"))))
+        log.Fatal(http.ListenAndServe(":8000", nil))
+    }
+
 ------------------------------------------------------------------------
 License
 ------------------------------------------------------------------------
