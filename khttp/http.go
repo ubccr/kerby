@@ -82,16 +82,17 @@ func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
 		return nil, err
 	}
 
-	authReply := strings.Split(resp.Header.Get(wwwAuthenticateHeader), " ")
-	if len(authReply) != 2 || strings.ToLower(authReply[0]) != strings.ToLower(negotiateHeader) {
-		return nil, errors.New("khttp: server replied with invalid www-authenticate header")
-	}
+	if resp.StatusCode >= 300 && resp.StatusCode < 400 {
+		authReply := strings.Split(resp.Header.Get(wwwAuthenticateHeader), " ")
+		if len(authReply) != 2 || strings.ToLower(authReply[0]) != strings.ToLower(negotiateHeader) {
+			return nil, errors.New("khttp: server replied with invalid www-authenticate header")
+		}
 
-	// Authenticate the reply from the server
-	err = kc.Step(authReply[1])
-	if err != nil {
-		return nil, err
+		// Authenticate the reply from the server
+		err = kc.Step(authReply[1])
+		if err != nil {
+			return nil, err
+		}
 	}
-
 	return resp, nil
 }
