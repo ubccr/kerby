@@ -362,17 +362,17 @@ int authenticate_gss_server_step(
         &state->client_creds
     );
     
-    if (GSS_ERROR(state->maj_stat)) {
-        ret = AUTH_GSS_ERROR;
-        goto end;
-    }
-    
     // Grab the server response to send back to the client
     if (output_token.length) {
         state->response = base64_encode(
             (const unsigned char *)output_token.value, output_token.length
         );;
-        state->maj_stat = gss_release_buffer(&state->min_stat, &output_token);
+        gss_release_buffer(&state->min_stat, &output_token);
+    }
+    
+    if (GSS_ERROR(state->maj_stat)) {
+        ret = AUTH_GSS_ERROR;
+        goto end;
     }
     
     // Get the user name
