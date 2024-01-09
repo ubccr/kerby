@@ -82,6 +82,11 @@ func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
 		return nil, err
 	}
 
+	// If the server doesn't return 401 (unauthorized) then we shouldn't attempt to negotiate
+	if resp.StatusCode != 401 {
+		return resp, nil
+	}
+
 	authReply := strings.Split(resp.Header.Get(wwwAuthenticateHeader), " ")
 	if len(authReply) != 2 || strings.ToLower(authReply[0]) != strings.ToLower(negotiateHeader) {
 		return nil, errors.New("khttp: server replied with invalid www-authenticate header")
