@@ -17,7 +17,7 @@ package kerby
 
 /*
 #cgo CFLAGS: -std=gnu99
-#cgo LDFLAGS: -lgssapi_krb5 -lkrb5 -lk5crypto -lcom_err
+#cgo pkg-config: mit-krb5-gssapi mit-krb5
 #include "kerberosgss.h"
 #include <stdio.h>
 #include <stdlib.h>
